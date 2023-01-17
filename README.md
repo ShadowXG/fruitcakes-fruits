@@ -27,3 +27,19 @@ Controllers - Tell us what we can do and connect our views an our models. We can
 
 We're ussing express framework to build a server, in which we are using mongoose to process our requests and run CRUD operations using a mongoDb database.
 
+What we're building is a REST api, that runs full CRUD operations on a single resource. (This will change, eventually)
+
+## What is REST???
+
+## Describe REST and list the various routes
+
+| **URL**           | **HTTP Verb**|**Action**|
+|___________________|______________|__________|
+| /fruits/          | GET          | index    |
+| /fruits/:id       | GET          | show     |
+| /fruits/new       | GET          | new      |
+| /fruits           | POST         | create   |
+| /fruits/:id/edit  | GET          | edit     |
+| /fruits/:id       | PATCH/PUT    | update   |
+| /fruits/:id       | DELETE       | destroy  |
+|___________________|______________|__________|
