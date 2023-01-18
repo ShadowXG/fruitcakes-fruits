@@ -24,7 +24,7 @@ const fruitSchema = new Schema({
     owner: {
         // this is where we set up an objectId referenc
         // by declaring that as the type
-        typ: Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         // this line tels us which model to look at
         ref: 'User'
     }
