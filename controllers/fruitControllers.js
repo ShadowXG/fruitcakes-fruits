@@ -12,32 +12,6 @@ const router = express.Router()
 /////////////////////////////////////
 //// Routes                      ////
 /////////////////////////////////////
-// we're going to build a seed route
-// this will seed the database for us with a few starter resources
-// There are two ways we will talk about seeding the database
-// First -> seed route, they work but they are not best practices
-// Second -> seed script, they work and they ARE best practices
-router.get('/seed', (req, res) => {
-    // array of starter resources(fruits)
-    const startFruits = [
-        { name: 'Orange', color: 'orange', readyToEat: true },
-        { name: 'Grape', color: 'purple', readyToEat: true },
-        { name: 'Banana', color: 'green', readyToEat: false },
-        { name: 'Strawberry', color: 'red', readyToEat: false },
-        { name: 'Coconut', color: 'brown', readyToEat: true }
-    ]
-    // then we delete every fruit in the database(all instances of this resource)
-    Fruit.deleteMany({})
-        .then(() => {
-            // then we'll seed(create) our starter fruits
-            Fruit.create(startFruits)
-                // tell our db what to do with success and failures
-                .then(data => {
-                    res.json(data)
-                })
-                .catch(err => console.log('The following error occurred: \n', err))
-        })
-})
 
 // INDEX route 
 // Read -> finds and displays all fruits
@@ -47,7 +21,10 @@ router.get('/', (req, res) => {
         // send json if successful
         .then(fruits => { res.json({ fruits: fruits })})
         // catch errors if they occur
-        .catch(err => console.log('The following error occurred: \n', err))
+        .catch(err => {
+            console.log(err)
+            res.status(404).json(err)
+        })
 })
 
 // CREATE route
@@ -63,7 +40,10 @@ router.post('/', (req, res) => {
             res.status(201).json({ fruit: fruit.toObject() })
         })
         // send an error if one occurs
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            res.status(404).json(err)
+        })
 })
 
 // PUT route
@@ -83,7 +63,10 @@ router.put('/:id', (req, res) => {
             console.log('The updated fruit', fruit)
             res.sendStatus(204)
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            res.status(404).json(err)
+        })
 })
 
 // DELETE route
@@ -93,11 +76,14 @@ router.delete('/:id', (req, res) => {
     const id = req.params.id
     // find and delete the fruit
     Fruit.findByIdAndRemove(id)
+        // send a 204 if successful
         .then(() => {
             res.sendStatus(204)
         })
-        .catch(err => console.log(err))
-    // send a 204 if successful
+        .catch(err => {
+            console.log(err)
+            res.status(404).json(err)
+        })
 })
 
 // SHOW route
@@ -112,7 +98,10 @@ router.get('/:id', (req, res) => {
             res.json({ fruit: fruit })
         })
         // cath any errors
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            res.status(404).json(err)
+        })
 })
 
 /////////////////////////////////////
