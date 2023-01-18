@@ -18,6 +18,9 @@ const router = express.Router()
 router.get('/', (req, res) => {
     // find all the fruits
     Fruit.find({})
+        // there's a built in function that runs before the rest of the promise chain
+        // the function is called populate, and it's able to retreive info from other documents in the collection
+        .populate('owner', '-password')
         // send json if successful
         .then(fruits => { res.json({ fruits: fruits })})
         // catch errors if they occur
@@ -58,6 +61,7 @@ router.post('/', (req, res) => {
 router.get('/mine', (req, res) => {
     // find fruits by ownership, using the req.session info
     Fruit.find({ owner: req.session.userId })
+        .populate('owner', '-password')
         .then(fruits => {
             // if found, display the fruits
             res.status(200).json({ fruits: fruits })
