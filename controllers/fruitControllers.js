@@ -68,43 +68,50 @@ router.get('/mine', (req, res) => {
             res.status(400).json(err)
         })
 })
+
 // PUT route
-// Update -> updates a specific fruit
-// PUT replaces the entire docement with a new document for the req.body
-// PATCH is able to update specific fields at specific fields at specific times, 
-// but it requires a little more code to ensure it works properly, so we'll use that later
+// Update -> updates a specific fruit(only if the fruit's owner is updating)
 router.put('/:id', (req, res) => {
-    // save the id to a variable for easy use later
     const id = req.params.id
-    // save the request body to a variable for easy reference later
-    const updatedFruit = req.body
-    // we're going to use the mongoose method:
-    // findByIdAndUpdate
-    Fruit.findByIdAndUpdate(id, updatedFruit, { new: true})
+    Fruit.findById(id)
         .then(fruit => {
-            console.log('The updated fruit', fruit)
-            res.sendStatus(204)
+            // if the owner of the fruit is the person who is logged in 
+            if (fruit.owner == req.session.userId) {
+                // and send success message
+                res.sendStatus(204)
+                // update and save the fruit
+                return fruit.updateOne(req.body)
+            } else {
+                // otherwise send a 401 unathorized status
+                res.sendStatus(401)
+            }
         })
         .catch(err => {
             console.log(err)
-            res.status(404).json(err)
+            res.status(400).json(err)
         })
 })
 
 // DELETE route
 // Delete -> delete a specific fruit
 router.delete('/:id', (req, res) => {
-    // get the id from the req
     const id = req.params.id
-    // find and delete the fruit
-    Fruit.findByIdAndRemove(id)
-        // send a 204 if successful
-        .then(() => {
-            res.sendStatus(204)
+    Fruit.findById(id)
+        .then(fruit => {
+            // if the owner of the fruit is the person who is logged in 
+            if (fruit.owner == req.session.userId) {
+                // and send success message
+                res.sendStatus(204)
+                // udlete the fruit
+                return fruit.deleteOne()
+            } else {
+                // otherwise send a 401 unathorized status
+                res.sendStatus(401)
+            }
         })
         .catch(err => {
             console.log(err)
-            res.status(404).json(err)
+            res.status(400).json(err)
         })
 })
 
