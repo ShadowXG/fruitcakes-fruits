@@ -37,7 +37,7 @@ middleware(app)
 //// Routes                      ////
 /////////////////////////////////////
 app.get('/', (req, res) => {
-    res.render('layout.liquid')
+    res.render('home.liquid')
 })
 
 // This is now where we register our routes, 
