@@ -1,31 +1,31 @@
 # Fruitcakes Full CRUD Full Stack App
 
 - Use Express to build a server
-- Use mongoose to communicate with mongoDB
+- Use Mongoose to communicate with mongoDB
 - Full CRUD functionality on our fruits resource
 - User Authentication
 - The ability to add comments to fruits
 - (Maybe gather data from a 3rd party API)
 
-This app will start as an API, that receives request and sends JSON responses, but eventually we will add a views layer that will render html in our browser.
+This app will start as an API, that receives requests and sends JSON responses, but eventually we will add a views layer that will render html in our browser.
 
-This is an MVC application
+This is an MVC application.
 We're using the MVC system for organizing our code.
 This breaks our app down into these three parts.
-MVC stands for
+MVC stands for 
 - Models
 - Views
 - Controllers
 
-Models- All of our data, what shap it's in and what resources we're using(models), and how our resources relate to one another
+Models - All of our data, what shape it's in and what resources we're using(models), and how our resources relate to one another
 
-Views - All the different ways we can see our data, whether it's as a JSON response, or an catual HTML response, this determines how our dat can be viewed by the user.
+Views - All the different ways we can see our data, whether it's as a JSON response, or an actual HTML response, this determines how our data can be viewed by the user.
 
-Controllers - Tell us what we can do and connect our views an our models. We can think of our routes as our controllers, because the determine how a user can interact with our resources.
+Controllers - Tell us what we can do and connect our views and our models. We can think of our routes as our controllers, because they determine how a user can interact with our resources
 
 ## How we talk about what we're doing
 
-We're ussing express framework to build a server, in which we are using mongoose to process our requests and run CRUD operations using a mongoDb database.
+We're using express framework to build a server, in which we are using mongoose to process our requests and run CRUD operations using a mongoDb database.
 
 What we're building is a REST api, that runs full CRUD operations on a single resource. (This will change, eventually)
 
@@ -33,15 +33,40 @@ What we're building is a REST api, that runs full CRUD operations on a single re
 
 ## Describe REST and list the various routes
 
-| **URL**           | **HTTP Verb**|**Action**|
-|-------------------|--------------|----------|
-| /fruits/          | GET          | index    
-| /fruits/:id       | GET          | show     
-| /fruits/new       | GET          | new      
-| /fruits           | POST         | create   
-| /fruits/:id/edit  | GET          | edit     
-| /fruits/:id       | PATCH/PUT    | update   
-| /fruits/:id       | DELETE       | destroy  
+- REST stands for REpresentational State Transfer
+- It's just a set of principles that describe how networked resources are accessed and manipulated
+- We have 7 RESTful routes that allow us basic operations for reading and manipulating a collection of data:
+
+## Route tables for documents
+
+#### Fruits
+
+| **URL**          | **HTTP Verb**|**Action**|
+|------------------|--------------|----------|
+| /fruits/         | GET          | index  
+| /fruits/:id      | GET          | show       
+| /fruits/new      | GET          | new   
+| /fruits          | POST         | create   
+| /fruits/:id/edit | GET          | edit       
+| /fruits/:id      | PATCH/PUT    | update    
+| /fruits/:id      | DELETE       | destroy  
+
+#### Comments
+
+| **URL**          | **HTTP Verb**|**Action**|
+|--------------------|--------------|----------|
+| /comments/:fruitId | POST         | create  
+| /comments/delete/:fruitId/:commentId      | DELETE          | destroy       
+
+
+#### Users
+
+| **URL**          | **HTTP Verb**|**Action**|
+|------------------|--------------|----------|
+| /users/signup    | POST         | create  
+| /users/login     | POST         | create       
+| /users/logout    | DELETE       | destroy   
+ 
 
 So far, we've used 5 RESTful routes to build our API
 
@@ -64,3 +89,16 @@ The connection between fruits and mongoDb, starts with the file `utils/connectio
 
 Middleware is processed by a function in the utils directory. `utils/middleware.js` 
 This middleware function takes one argument, app, and processes requests through our middleware.
+
+## Relationships
+
+One to many: 
+    - One user can have many fruits
+    - One fruit can have many comments
+
+Fruits are connected to Users through the `fruit.owner` field, via `objectId` reference
+Comments are connected to Fruits, as an array of subdocuments at `fruit.comments`
+Users are connected to comments, via `objectId` reference, at `comment.author`
+
+This is an entity relationship diagram(basic version for now)
+This accurately describes my relationships between my documents(entities)
